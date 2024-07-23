@@ -1,0 +1,11 @@
+# Ignore Python virtual environment
+venv/
+__pycache__/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore log files and databases
+*.log
+*.sqlite3
+ 
