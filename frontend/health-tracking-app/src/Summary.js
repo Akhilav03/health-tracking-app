@@ -53,7 +53,7 @@ const Summary = () => {
             <ul>
                 {exerciseSummary.map((exercise) => (
                     <li key={exercise.id}>
-                        {`${exercise.date} - ${exercise.type}: ${exercise.duration} minutes, ${exercise.intensity} intensity`}
+                        {`${exercise.date} - ${exercise.workout_type}: ${exercise.duration} minutes, ${exercise.intensity} intensity`} {/* Update this line */}
                         <button onClick={() => handleDeleteExercise(exercise.id)}>Delete</button>
                     </li>
                 ))}
