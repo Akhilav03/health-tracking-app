@@ -11,9 +11,11 @@ const Home = () => {
             <ExerciseForm />
             <DietForm />
             <Summary />
-            <Link to="/summary">
-                <button>View Summary Chart</button>
-            </Link>
+            <div style={{ textAlign: 'center' }}>
+                <Link to="/summary">
+                    <button>View Summary Chart</button>
+                </Link>
+            </div>
         </div>
     );
 };

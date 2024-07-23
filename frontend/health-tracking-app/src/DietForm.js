@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const DietForm = () => {
     const [diet, setDiet] = useState({ meal: '', calories: '', nutrients: '' });

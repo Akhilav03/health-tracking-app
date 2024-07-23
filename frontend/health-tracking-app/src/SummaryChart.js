@@ -12,6 +12,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import './App.css';
 
 ChartJS.register(
     CategoryScale,
@@ -73,13 +74,14 @@ const SummaryChart = () => {
     }, []);
 
     return (
-        <div>
+        <div className="chart-container">
             <h2>Summary Chart</h2>
             <Line data={chartData} />
-            <button onClick={() => navigate('/')}>Go Back</button>
+            <div style={{ textAlign: 'center' }}>
+                <button onClick={() => navigate('/')}>Go Back</button>
+            </div>
         </div>
     );
 };
 
 export default SummaryChart;
-

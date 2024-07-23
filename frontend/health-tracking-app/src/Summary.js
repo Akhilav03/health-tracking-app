@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const Summary = () => {
     const [exerciseSummary, setExerciseSummary] = useState([]);
@@ -47,7 +48,7 @@ const Summary = () => {
     };
 
     return (
-        <div>
+        <div className="summary">
             <h2>Exercise Summary</h2>
             <ul>
                 {exerciseSummary.map((exercise) => (
