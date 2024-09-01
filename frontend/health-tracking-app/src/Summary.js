@@ -53,7 +53,7 @@ const Summary = () => {
             <ul>
                 {exerciseSummary.map((exercise) => (
                     <li key={exercise.id}>
-                        {`${exercise.date} - ${exercise.workout_type}: ${exercise.duration} minutes, ${exercise.intensity} intensity`} {/* Update this line */}
+                        {`${exercise.date} - Type: ${exercise.type || 'N/A'}, Duration: ${exercise.duration} minutes, Difficulty: ${exercise.difficulty_level}, Calories Burned: ${exercise.calories_burned}, Distance: ${exercise.distance_run} km`}
                         <button onClick={() => handleDeleteExercise(exercise.id)}>Delete</button>
                     </li>
                 ))}
@@ -62,7 +62,7 @@ const Summary = () => {
             <ul>
                 {dietSummary.map((diet) => (
                     <li key={diet.id}>
-                        {`${diet.date} - ${diet.meal}: ${diet.calories} calories, ${diet.nutrients}`}
+                        {`${diet.date} - Meal: ${diet.meal}, Calories: ${diet.calories} calories, Nutrients: ${diet.nutrients}`}
                         <button onClick={() => handleDeleteDiet(diet.id)}>Delete</button>
                     </li>
                 ))}

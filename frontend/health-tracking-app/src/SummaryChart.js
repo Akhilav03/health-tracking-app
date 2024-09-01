@@ -12,7 +12,17 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import './App.css';
+
+// Define the function above the component where it's used
+function getAllDates(startDate, endDate) {
+    const dateArray = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= new Date(endDate)) {
+        dateArray.push(new Date(currentDate).toISOString().slice(0, 10)); // Format YYYY-MM-DD
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dateArray;
+}
 
 ChartJS.register(
     CategoryScale,
@@ -36,18 +46,17 @@ const SummaryChart = () => {
         const fetchSummary = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:5000/summary');
-                const exercises = response.data.exercises || [];
-                const diets = response.data.diets || [];
+                console.log("API Response:", response.data); // Debug API response
 
-                // Process data for the chart
-                const exerciseDates = exercises.map(ex => ex.date);
-                const exerciseDurations = exercises.map(ex => ex.duration);
-
-                const dietDates = diets.map(dt => dt.date);
-                const dietCalories = diets.map(dt => dt.calories);
+                const dataByDate = response.data;
+                const allDatesFromData = Object.keys(dataByDate).sort();
+                const allDates = getAllDates(allDatesFromData[0], allDatesFromData[allDatesFromData.length - 1]);
+                
+                const exerciseDurations = allDates.map(date => dataByDate[date]?.duration || 0);
+                const dietCalories = allDates.map(date => dataByDate[date]?.calories_intake || 0);
 
                 setChartData({
-                    labels: exerciseDates, // Assuming exercises and diets have the same dates
+                    labels: allDates,
                     datasets: [
                         {
                             label: 'Exercise Duration',
