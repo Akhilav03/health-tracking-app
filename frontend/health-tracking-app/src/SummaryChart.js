@@ -47,27 +47,28 @@ const SummaryChart = () => {
             try {
                 const response = await axios.get('http://127.0.0.1:5000/summary');
                 console.log("API Response:", response.data); // Debug API response
-
+    
                 const dataByDate = response.data;
                 const allDatesFromData = Object.keys(dataByDate).sort();
                 const allDates = getAllDates(allDatesFromData[0], allDatesFromData[allDatesFromData.length - 1]);
                 
+                // Map the data for the chart
+                const caloriesBurned = allDates.map(date => dataByDate[date]?.calories_burned || 0);
                 const exerciseDurations = allDates.map(date => dataByDate[date]?.duration || 0);
-                const dietCalories = allDates.map(date => dataByDate[date]?.calories_intake || 0);
-
+    
                 setChartData({
                     labels: allDates,
                     datasets: [
                         {
-                            label: 'Exercise Duration',
-                            data: exerciseDurations,
+                            label: 'Calories Burned',
+                            data: caloriesBurned,
                             borderColor: 'rgba(75, 192, 192, 1)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             fill: false,
                         },
                         {
-                            label: 'Diet Calories',
-                            data: dietCalories,
+                            label: 'Exercise Duration (minutes)',
+                            data: exerciseDurations,
                             borderColor: 'rgba(255, 99, 132, 1)',
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             fill: false,
@@ -78,9 +79,10 @@ const SummaryChart = () => {
                 console.error('Error fetching summary data:', error);
             }
         };
-
+    
         fetchSummary();
     }, []);
+    
 
     return (
         <div className="chart-container">
