@@ -13,17 +13,6 @@ import {
     Legend,
 } from 'chart.js';
 
-// Define the function above the component where it's used
-function getAllDates(startDate, endDate) {
-    const dateArray = [];
-    let currentDate = new Date(startDate);
-    while (currentDate <= new Date(endDate)) {
-        dateArray.push(new Date(currentDate).toISOString().slice(0, 10)); // Format YYYY-MM-DD
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-    return dateArray;
-}
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -46,18 +35,15 @@ const SummaryChart = () => {
         const fetchSummary = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:5000/summary');
-                console.log("API Response:", response.data); // Debug API response
-    
-                const dataByDate = response.data;
-                const allDatesFromData = Object.keys(dataByDate).sort();
-                const allDates = getAllDates(allDatesFromData[0], allDatesFromData[allDatesFromData.length - 1]);
-                
-                // Map the data for the chart
-                const caloriesBurned = allDates.map(date => dataByDate[date]?.calories_burned || 0);
-                const exerciseDurations = allDates.map(date => dataByDate[date]?.duration || 0);
-    
+                console.log("API Response:", response.data);
+
+                const entries = response.data;
+                const labels = entries.map((entry, index) => `Entry ${index + 1}`);
+                const caloriesBurned = entries.map(entry => entry.calories_burned || 0);
+                const exerciseDurations = entries.map(entry => entry.duration || 0);
+
                 setChartData({
-                    labels: allDates,
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Calories Burned',
@@ -79,10 +65,9 @@ const SummaryChart = () => {
                 console.error('Error fetching summary data:', error);
             }
         };
-    
+
         fetchSummary();
     }, []);
-    
 
     return (
         <div className="chart-container">

@@ -9,7 +9,6 @@ app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///health_tracking.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
 
 
@@ -28,7 +27,6 @@ class Diet(db.Model):
     meal = db.Column(db.String(50), nullable=False)
     calories = db.Column(db.Integer, nullable=False)
     nutrients = db.Column(db.String(200), nullable=False)
-
 
 
 @app.route('/')
@@ -75,31 +73,31 @@ def get_diet_summary():
     summary = [{"id": dt.id, "date": dt.date, "meal": dt.meal, "calories": dt.calories, "nutrients": dt.nutrients} for dt in diets]
     return jsonify(summary), 200
 
-
-
 @app.route('/summary', methods=['GET'])
 def get_summary():
     exercises = Exercise.query.all()
     diets = Diet.query.all()
-
-    # Organize data by date
-    daily_data = defaultdict(lambda: {'calories_burned': 0, 'calories_intake': 0, 'duration': 0, 'difficulty_levels': []})
+    entries = []
 
     for ex in exercises:
-        daily_data[ex.date]['calories_burned'] += ex.calories_burned
-        daily_data[ex.date]['duration'] += ex.duration
-        daily_data[ex.date]['difficulty_levels'].append(ex.difficulty_level)
+        entries.append({
+            'type': 'exercise',
+            'date': ex.date,
+            'duration': ex.duration,
+            'calories_burned': ex.calories_burned,
+            'difficulty_level': ex.difficulty_level
+        })
 
     for dt in diets:
-        daily_data[dt.date]['calories_intake'] += dt.calories
+        entries.append({
+            'type': 'diet',
+            'date': dt.date,
+            'calories_intake': dt.calories,
+            'nutrients': dt.nutrients
+        })
 
-    # Convert defaultdict to regular dict for JSON serialization
-    daily_summary = {date: data for date, data in daily_data.items()}
-    return jsonify(daily_summary), 200
-
-
-
-
+    entries.sort(key=lambda x: x['date'])
+    return jsonify(entries), 200
 
 @app.route('/exercise/<int:id>', methods=['DELETE'])
 def delete_exercise(id):
@@ -120,7 +118,6 @@ def delete_diet(id):
         return jsonify({"message": "Diet deleted successfully"}), 200
     else:
         return jsonify({"message": "Diet not found"}), 404
-
 
 
 if __name__ == '__main__':
