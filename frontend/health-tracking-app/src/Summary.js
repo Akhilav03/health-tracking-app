@@ -62,7 +62,7 @@ const Summary = () => {
             <ul>
                 {dietSummary.map((diet) => (
                     <li key={diet.id}>
-                        {`${diet.date} - Meal: ${diet.meal}, Calories: ${diet.calories} calories, Nutrients: ${diet.nutrients}`}
+                        {`${diet.date} - Meal: ${diet.meal}, Calories: ${diet.calories} calories`}
                         <button onClick={() => handleDeleteDiet(diet.id)}>Delete</button>
                     </li>
                 ))}

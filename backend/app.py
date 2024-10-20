@@ -26,7 +26,15 @@ class Diet(db.Model):
     date = db.Column(db.String(50), nullable=False)
     meal = db.Column(db.String(50), nullable=False)
     calories = db.Column(db.Integer, nullable=False)
-    nutrients = db.Column(db.String(200), nullable=False)
+
+
+
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
+
+
+
 
 
 @app.route('/')
@@ -55,7 +63,6 @@ def add_diet():
         date=datetime.now().strftime("%Y-%m-%d"),
         meal=data['meal'],
         calories=data['calories'],
-        nutrients=data['nutrients']
     )
     db.session.add(new_diet)
     db.session.commit()
@@ -70,7 +77,7 @@ def get_exercise_summary():
 @app.route('/summary/diet', methods=['GET'])
 def get_diet_summary():
     diets = Diet.query.all()
-    summary = [{"id": dt.id, "date": dt.date, "meal": dt.meal, "calories": dt.calories, "nutrients": dt.nutrients} for dt in diets]
+    summary = [{"id": dt.id, "date": dt.date, "meal": dt.meal, "calories": dt.calories} for dt in diets]
     return jsonify(summary), 200
 
 @app.route('/summary', methods=['GET'])
@@ -93,7 +100,6 @@ def get_summary():
             'type': 'diet',
             'date': dt.date,
             'calories_intake': dt.calories,
-            'nutrients': dt.nutrients
         })
 
     entries.sort(key=lambda x: x['date'])
@@ -120,5 +126,10 @@ def delete_diet(id):
         return jsonify({"message": "Diet not found"}), 404
 
 
+# if __name__ == '__main__':
+#     app.run(debug=True)
+    
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
