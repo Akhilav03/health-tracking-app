@@ -1,9 +1,9 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
-  margin: 2cm;
+  margin: 0;
   padding: 0;
-  /* margin-bottom: 2cm; */
+  margin-bottom: 2cm;
 }
 
 h1 {
@@ -93,4 +93,82 @@ button:hover {
 .chart-container h2 {
   text-align: center;
   color: #343a40;
+}
+
+
+
+
+.login-register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  background-color: #f8f9fa;
+}
+
+.login-register-form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 320px;
+}
+
+.login-register-form h2 {
+  color: #343a40;
+  text-align: center;
+}
+
+.login-register-form p {
+  text-align: center;
+  color: #6c757d;
+}
+
+.login-register-form a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-register-form a:hover {
+  color: #0056b3;
+}
+
+
+
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #e1ebf1; 
+  color: rgb(10, 10, 10);
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+}
+
+header nav a {
+  color: rgb(5, 5, 5);
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+header .welcome-message {
+  font-size: 18px;
+  color: #830808;
+}
+
+header center{
+  color: rgb(10, 10, 10);
+  margin-left:-5cm;
+  font-size: 30px;
 }

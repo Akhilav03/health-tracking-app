@@ -4,12 +4,22 @@ from flask_cors import CORS
 from datetime import datetime
 from collections import defaultdict
 from flask import jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///health_tracking.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 class Exercise(db.Model):
@@ -27,6 +37,22 @@ class Diet(db.Model):
     meal = db.Column(db.String(50), nullable=False)
     calories = db.Column(db.Integer, nullable=False)
 
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 # @app.before_first_request
@@ -124,6 +150,29 @@ def delete_diet(id):
         return jsonify({"message": "Diet deleted successfully"}), 200
     else:
         return jsonify({"message": "Diet not found"}), 404
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    if User.query.filter_by(username=username).first() is not None:
+        return jsonify({'message': 'Username already exists'}), 409
+    user = User(username=username)
+    user.set_password(password)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'User successfully registered'}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(username=data['username']).first()
+    if user is None or not user.check_password(data['password']):
+        return jsonify({'message': 'Invalid username or password'}), 401
+    login_user(user)
+    return jsonify({'message': 'Logged in successfully'}), 200
+
 
 
 # if __name__ == '__main__':
