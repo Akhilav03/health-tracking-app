@@ -5,7 +5,8 @@
 The Health Tracking App is a web application designed to track exercise and diet data, providing users with a comprehensive view of their health and lifestyle. The app features a React frontend for user interaction and a Flask backend for data management. Users can add exercise and diet entries, view summaries, and visualize data with charts.
 
 ## Features
-
+- Login Page
+- Register Page
 - Add and delete exercise entries.
 - Add and delete diet entries.
 - View the summary of exercise and diet data.
@@ -16,8 +17,6 @@ The Health Tracking App is a web application designed to track exercise and diet
 - **Frontend**: React, Axios, Chart.js, React Chart.js 2
 - **Backend**: Flask, Flask-Cors, Flask-SQLAlchemy
 - **Database**: SQLite
-
-## Installation
 
 ### Prerequisites
 
